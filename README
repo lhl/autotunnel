@@ -17,7 +17,7 @@ Assumptions:
   see: http://www.thegeekstuff.com/2008/11/3-steps-to-perform-ssh-login-without-password-using-ssh-keygen-ssh-copy-id/
 - Requires autossh http://www.harding.motd.ca/autossh/
   This can be installed via MacPorts (sudo port install autossh)
-- autossh uses :31337+31337 for monitoring; won't work if you have Back Orifice installed (har)
+- autossh uses :31337+31338 for monitoring; won't work if you have Back Orifice installed (har)
 
 Setup:
 - Edit the sshconfig file with your server info 
