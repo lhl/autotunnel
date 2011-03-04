@@ -8,8 +8,8 @@
 
 if [[ `networksetup -getsocksfirewallproxy Airport | grep 'Enabled: Yes'` ]]; then
   # Start
-  launchctl load ~/Library/LaunchAgents/local.autotunnel.autossh.plist
+  launchctl load -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
 else
   # Stop
-  launchctl unload ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
+  launchctl unload -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
 fi
