@@ -38,5 +38,7 @@ Alternatives/Background Reading:
 * http://codesorcery.net/meerkat 
   this is probably easiest alternative for non-technical users
 * https://github.com/nicksieger/sheepsafe
-  this looks similar to what I wrote; uses ssh vs autossh; switches locations based on
-  known wifi; runs as daemon
+  this looks similar to what I wrote; uses ssh vs autossh; switches locations 
+  based on known wifi; runs as daemon; if this switches only after you jump on
+  unknown wireless, doesn't it close the barn doors a bit late for 
+  auto-reconnecting apps like Adium?
