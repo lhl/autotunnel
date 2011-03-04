@@ -2,9 +2,9 @@ This is a set of scripts for OS X that will automatically connect your SSH SOCKS
 proxy when you switch to a SOCKS-enabled Network Location.
 
 Basically, we add a LaunchAgent to detect when your active Network Location 
-profile has changed. If set to a SOCKS-enabled profile, it sets another 
+profile has changed. If set to a SOCKS-enabled profile, it enables another 
 LaunchAgent to start an autossh session.  If changed to a non-SOCKS profile,
-we kill all autossh sessions. Easy peezy.
+we disables that LaunchAgent, stopping autossh. Easy peezy.
 
 WARNING! If that didn't make sense or you don't understand what these files are
 doing, then don't use this!  This won't work if installed improperly and might
@@ -38,4 +38,5 @@ Alternatives/Background Reading:
 * http://codesorcery.net/meerkat 
   this is probably easiest alternative for non-technical users
 * https://github.com/nicksieger/sheepsafe
-  this looks similar to what I wrote
+  this looks similar to what I wrote; uses ssh vs autossh; switches locations based on
+  known wifi; runs as daemon
