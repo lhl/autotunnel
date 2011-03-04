@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ `networksetup -getsocksfirewallproxy Airport | grep 'Enabled: Yes'` ]]; then
+  autossh -M 31337 -N autotunnel 2> /dev/null
+else
+  # SOCKS turned off. Lets clean up autossh
+  killall autossh 2> /dev/null
+fi
