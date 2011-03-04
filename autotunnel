@@ -1,8 +1,15 @@
 #!/bin/bash
 
+###
+# We can't start the autotunnel directly because launchd is uncooperative
+# (I can't find a way to fork where autossh keeps running, and if it you
+# leave it running autotunnel won't be called again. Boo!)
+###
+
 if [[ `networksetup -getsocksfirewallproxy Airport | grep 'Enabled: Yes'` ]]; then
-  autossh -M 31337 -N autotunnel 2> /dev/null
+  # Start
+  launchctl load ~/Library/LaunchAgents/local.autotunnel.autossh.plist
 else
-  # SOCKS turned off. Lets clean up autossh
-  killall autossh 2> /dev/null
+  # Stop
+  launchctl unload ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
 fi
