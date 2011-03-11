@@ -4,6 +4,12 @@
 <dict>
   <key>Label</key>
   <string>local.autotunnel.autossh</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- Be a lot more respnsive -->
+    <key>AUTOSSH_POLL</key>
+    <string>5</string>
+  </dict>
   <key>ProgramArguments</key>
   <array>
     <string>/opt/local/bin/autossh</string>
