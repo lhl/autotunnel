@@ -40,7 +40,8 @@ Alternatives/Background Reading:
   this looks like the easiest/most developed solution? however, like sheepsafe
   it switches locations automatically (based on whether wifi is secure or not).
   that means it switches only after you're connected, so may also suffer the
-  problem of auto-reconnecting apps like Adium?
+  problem of auto-reconnecting apps like Adium? also not sure how compatible it
+  is with captive portals...
 * http://codesorcery.net/meerkat 
   commercial alternative for non-technical users
 * https://github.com/nicksieger/sheepsafe
