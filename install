@@ -1,0 +1,48 @@
+#!/bin/bash
+
+###
+# Check requirements
+###
+
+# checking for autossh
+echo -n "Checking for autossh... "
+AUTOSSH=`which autossh`
+if [[ -z $AUTOSSH ]]; then
+  echo 'NOT FOUND'
+  echo "  autotunnel requires autossh! Will try to install via MacPorts..."
+
+  # Check for Macports
+  echo
+  echo -n "Checking for MacPorts... "
+  if [[ -z `port2 version 2> /dev/null` ]]; then
+    echo "NOT FOUND"
+    echo "  We couldn't find MacPorts in your path."
+    echo "  If you have autossh installed through another method, install manually."
+    echo "  Otherwise, install MacPorts: http://www.macports.org/install.php"
+    exit
+  else
+    echo "OK"
+  fi
+
+  echo "Installing autossh. You may have to enter your password."
+  sudo port install autossh
+
+  AUTOSSH=`which autossh`
+  if [[ -z $AUTOSSH ]]; then
+    echo "Hmm... we still can't find autossh in your path."
+    echo "I give up!"
+    exit
+  fi
+else 
+  echo "OK"
+fi
+
+
+# Check Locations
+echo -n "Checking Network Locations... "
+if [[ -z `networksetup -listlocations | grep -v Automatic` ]]; then
+  echo "We couldn't find an alternate Network Location. Would you like us to create one?
+fi
+
+# Checking SSH Keys
+# Checking for Server
