@@ -5,7 +5,7 @@
   <key>Label</key>
   <string>local.autotunnel</string>
   <key>Program</key>
-  <string>/Users/lhl/bin/autotunnel</string>
+  <string>/YOUR_LOCATION/autotunnel</string>
   <key>WatchPaths</key>
   <array>
     <string>/Library/Preferences/SystemConfiguration/preferences.plist</string>
