@@ -1,48 +1,136 @@
-#!/bin/bash
-
-###
-# Check requirements
-###
-
-# checking for autossh
-echo -n "Checking for autossh... "
-AUTOSSH=`which autossh`
-if [[ -z $AUTOSSH ]]; then
-  echo 'NOT FOUND'
-  echo "  autotunnel requires autossh! Will try to install via MacPorts..."
-
-  # Check for Macports
-  echo
-  echo -n "Checking for MacPorts... "
-  if [[ -z `port2 version 2> /dev/null` ]]; then
-    echo "NOT FOUND"
-    echo "  We couldn't find MacPorts in your path."
-    echo "  If you have autossh installed through another method, install manually."
-    echo "  Otherwise, install MacPorts: http://www.macports.org/install.php"
-    exit
-  else
-    echo "OK"
-  fi
-
-  echo "Installing autossh. You may have to enter your password."
-  sudo port install autossh
-
-  AUTOSSH=`which autossh`
-  if [[ -z $AUTOSSH ]]; then
-    echo "Hmm... we still can't find autossh in your path."
-    echo "I give up!"
-    exit
-  fi
-else 
-  echo "OK"
-fi
+#!/usr/bin/env python
 
 
-# Check Locations
-echo -n "Checking Network Locations... "
-if [[ -z `networksetup -listlocations | grep -v Automatic` ]]; then
-  echo "We couldn't find an alternate Network Location. Would you like us to create one?
-fi
+import glob
+import os
+import platform
+from   pprint import pprint
+import re
+import readline
+import subprocess
+import sys
 
-# Checking SSH Keys
-# Checking for Server
+
+def main():
+  version_check()
+
+  print '''
+AUTOTUNNEL INSTALLER
+===
+Installs script and plist and network location to automatically
+use a SSH-based SOCKS Proxy
+  ''' 
+  network_location()
+
+  ssh_keycheck()
+
+  install_autotunnel_autossh()
+
+  install_autotunnel()
+
+  print
+  print 'If you didn\'t see any errors, this should be working?'
+  print 'Try to switch to your SOCKS network location and see if you can browse/connect.'
+  print
+
+
+
+
+
+
+def version_check():
+  if not platform.system() == 'Darwin':
+    print 'This script is only for OS X!'
+    sys.exit()
+  if not (sys.version_info[0] == 2 and sys.version_info[1] >= 7):
+    print 'This script requires Python 2.7 to run!'
+    sys.exit()
+
+
+def network_location():
+  print 'You should make sure you have a network location w/ SOCKS enabled.'
+  print 'To create a new location, you can go to System Preferences -> Network Preferences'
+  print 'and click on Edit Locations in the Locations pull-down at top.'
+  print 'Switch to the new location and click on Wi-Fi -> Advanced...'
+  print 'Go to the Proxies tab and check SOCKS Proxy and set SOCKS Proxy Server'
+  print 'to "localhost" and "1080"'
+  print
+  raw_input('[Press ENTER to continue]')
+  print
+
+  # TODO: allow creation of proxy
+  '''
+  # non-default locations
+  'networksetup -listlocations | grep -v Automatic'
+  # create location
+  'sudo networksetup -createlocation SOCKS populate'
+  'sudo networksetup -switchtolocation SOCKS'
+  'sudo networksetup -setsecurewebproxy 'Wi-Fi' localhost 1080
+  'sudo networksetup -setsecurewebproxystate 'Wi-Fi' on'
+
+  Stored in NetworkServices
+  /Library/Preferences/SystemConfiguration/preferences.plist
+  '''
+
+
+def ssh_keycheck():
+  print 
+  print 'Automatic tunnels require passphrase-less SSH keys to work.'
+  print 'Doing a simple (not-foolproof) check...'
+  if not glob.glob('%s/.ssh/*.pub' % os.path.expanduser('~')):
+    create_ssh = raw_input('We couldn\'t find an SSH keyfile, should we make one? (y/n) ').strip()
+    if create_ssh and create_ssh[0].lower() == 'y':
+      subprocess.call('ssh-keygen')
+  else:
+    print 'OK, found a key'
+  print
+
+
+def install_autotunnel_autossh():
+  try:
+    autossh = subprocess.check_output(['which', 'autossh']).strip()
+  except:
+    print 'Couldn\'t find autossh executable! You can install it w/ MacPorts or Homebrew'
+    print 'or as a binary package from here: http://rudix.org/packages/autossh.html'
+    sys.exit()
+
+  plist = open('local.autotunnel.autossh.plist').read()
+  plist = plist.replace('REPLACE_AUTOSSH_BIN', autossh)
+  server = raw_input('What is your server hostname? ').strip()
+  plist = plist.replace('REPLACE_AUTOSSH_SERVER', server)
+  monitor_port = raw_input('What port should autossh use to monitor the connection (default 31337)? ').strip()
+  if not monitor_port:
+    monitor_port = '31337'
+  plist = plist.replace('REPLACE_AUTOSSH_MONITOR_PORT', monitor_port)
+
+  launch_path = '%s/Library/LaunchAgents' % os.path.expanduser('~')
+  if not os.path.exists(launch_path):
+    os.mkdir(launch_path)
+  launch_file = '%s/local.autotunnel.autossh.plist' % launch_path
+  print 'Writing plist to %s' % launch_file
+  out = open(launch_file, 'w')
+  out.write(plist)
+  out.close()
+
+
+def install_autotunnel():
+  autotunnel = '%s/autotunnel' % os.path.dirname(os.path.abspath(__file__))
+  print 'By default we will use autotunnel in the current location:'
+  print '  %s' % autotunnel
+  manual_autotunnel = raw_input('If you are manually copying it elsewhere, enter the full path (enter to skip): ').strip()
+  if manual_autotunnel:
+    autotunnel = manual_autotunnel
+  plist = open('local.autotunnel.plist').read()
+  plist = plist.replace('REPLACE_AUTOTUNNEL_LOCATION', autotunnel)
+
+  launch_autotunnel = '%s/Library/LaunchAgents/local.autotunnel.plist' % os.path.expanduser('~')
+  out = open(launch_autotunnel, 'w')
+  out.write(plist)
+  out.close()
+
+  print 'Loading autotunnel Agent!'
+  subprocess.call(['launchctl', 'load', launch_autotunnel])
+
+
+if __name__ == '__main__':
+  main()
