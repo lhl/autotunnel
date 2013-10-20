@@ -8,15 +8,17 @@
   <dict>
     <!-- Be a lot more respnsive -->
     <key>AUTOSSH_POLL</key>
-    <string>5</string>
+    <string>10</string>
   </dict>
   <key>ProgramArguments</key>
   <array>
     <string>/opt/local/bin/autossh</string>
+    <string>-N</string>
     <string>-M</string>
     <string>31337</string>
-    <string>-N</string>
-    <string>autotunnel</string>
+    <string>-D</string>
+    <string>1080</string>
+    <string>REPLACE_AUTOSSH_SERVER</string>
   </array>
   <key>KeepAlive</key>
   <dict>
