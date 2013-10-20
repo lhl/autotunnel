@@ -8,12 +8,12 @@
 
 if [[ `networksetup -getsocksfirewallproxy Airport | grep 'Enabled: Yes'` ]]; then
   # Start
-  launchctl load -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
+  launchctl load -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist
 # Thanks Lion!  
 elif [[ `networksetup -getsocksfirewallproxy Wi-Fi | grep 'Enabled: Yes'` ]]; then
   # Start
-  launchctl load -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
+  launchctl load -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist
 else
   # Stop
-  launchctl unload -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist 2> /dev/null
+  launchctl unload -w ~/Library/LaunchAgents/local.autotunnel.autossh.plist
 fi
