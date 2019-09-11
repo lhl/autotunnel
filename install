@@ -3,7 +3,6 @@
 
 import glob
 import os
-import pwd
 import platform
 from   pprint import pprint
 import re
@@ -102,14 +101,6 @@ def install_autotunnel_autossh():
   out = open(launch_file, 'w')
   out.write(plist)
   out.close()
-
-  #load the launchagent, enable it, and unload it
-  '''launch_autossh = '%s/Library/LaunchAgents/local.autotunnel.autossh.plist' % os.path.expanduser('~')
-  subprocess.call(['launchctl', 'load', launch_ssh])
-  uid = pwd.getpwuid( os.getuid() ).pw_uid
-  enable_autossh = "user/" + str(uid) + "/local.autotunnel.autossh"
-  subprocess.call(['launchctl', 'enable', enable_autotunnel])
-  subprocess.call(['launchctl', 'unload', launch_autotunnel])'''
 
 
 def install_autotunnel():
