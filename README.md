@@ -18,6 +18,14 @@ enables another LaunchAgent to start an autossh session.  If changed to a
 non-SOCKS profile, we disable that LaunchAgent, stopping autossh.
 
 
+TROUBLESHOOTING
+---
+In macOS Catalina (and possibly earlier versions) bash needs to be given Full Disk Access.
+This can be done by going to `System Preferences > Security & Privacy > Privacy > Full Disk Access` and adding `/bin/bash`.
+
+
+
+
 SEE ALSO
 ---
 * http://randomfoo.net/blog/id/3908
