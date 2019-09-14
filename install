@@ -87,21 +87,11 @@ def ssh_keycheck():
 
 
 def install_autotunnel_autossh():
-  try:
-    autossh = subprocess.check_output(['which', 'autossh']).strip()
-  except:
-    print 'Couldn\'t find autossh executable! You can install it w/ MacPorts or Homebrew'
-    print 'or as a binary package from here: http://rudix.org/packages/autossh.html'
-    sys.exit()
-
   plist = open('local.autotunnel.autossh.plist').read()
-  plist = plist.replace('REPLACE_AUTOSSH_BIN', autossh)
-  server = raw_input('What is your server hostname? ').strip()
+  server_username = raw_input('What is your server username? ').strip()
+  server_hostname = raw_input('What is your server hostname? ').strip()
+  server = server_username + '@' + server_hostname
   plist = plist.replace('REPLACE_AUTOSSH_SERVER', server)
-  monitor_port = raw_input('What port should autossh use to monitor the connection (default 31337)? ').strip()
-  if not monitor_port:
-    monitor_port = '31337'
-  plist = plist.replace('REPLACE_AUTOSSH_MONITOR_PORT', monitor_port)
 
   launch_path = '%s/Library/LaunchAgents' % os.path.expanduser('~')
   if not os.path.exists(launch_path):

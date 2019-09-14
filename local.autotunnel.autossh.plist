@@ -4,26 +4,35 @@
 <dict>
   <key>Label</key>
   <string>local.autotunnel.autossh</string>
-  <key>EnvironmentVariables</key>
-  <dict>
-    <!-- Be a lot more respnsive -->
-    <key>AUTOSSH_POLL</key>
-    <string>10</string>
-  </dict>
+  <key>LowPriorityIO</key>
+  <true/>
   <key>ProgramArguments</key>
   <array>
-    <string>/opt/local/bin/autossh</string>
-    <string>-N</string>
-    <string>-M</string>
-    <string>31337</string>
+    <string>/usr/bin/ssh</string>
+    <string>REPLACE_AUTOSSH_SERVER</string>
     <string>-D</string>
     <string>1080</string>
-    <string>REPLACE_AUTOSSH_SERVER</string>
+    <string>-p</string>
+    <string>22</string>
+    <string>-N</string>
+    <string>-v</string>
+    <string>-o</string>
+    <string>TCPKeepAlive=yes</string>
+    <string>-o</string>
+    <string>ServerAliveInterval=30</string>
   </array>
   <key>KeepAlive</key>
   <dict>
     <key>NetworkState</key>
     <true/>
   </dict>
+  <key>WatchPaths</key>
+  <array>
+    <string>/etc/resolv.conf</string>
+    <string>/var/run/resolv.conf</string>
+    <string>/private/var/run/resolv.conf</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
 </dict>
 </plist>
